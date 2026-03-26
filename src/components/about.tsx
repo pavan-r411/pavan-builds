@@ -1,15 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { GraduationCap, Briefcase, Code2, Brain } from "lucide-react";
 
 const stats = [
-  { label: "Years Experience", value: "3+", icon: Briefcase },
-  { label: "GPA at USC", value: "4.0", icon: GraduationCap },
-  { label: "Projects Built", value: "10+", icon: Code2 },
-  { label: "ML Models Fine-tuned", value: "3", icon: Brain },
+  { label: "years_experience", value: "3+", comment: "# SAP + Oracle" },
+  { label: "gpa", value: "4.0", comment: "# USC MS CS" },
+  { label: "projects_built", value: "10+", comment: "# and counting" },
+  { label: "llm_models_tuned", value: "3", comment: "# Llama, GPT-2, Deepseek" },
 ];
 
 const education = [
@@ -31,40 +29,43 @@ const education = [
 
 export function About() {
   return (
-    <section id="about" className="section-padding bg-muted/30">
+    <section id="about" className="section-padding bg-muted/20">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="mb-16"
         >
-          <Badge variant="outline" className="mb-4">About Me</Badge>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Who I Am</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            A full-stack and ML engineer with a deep interest in distributed systems and applied
-            AI — currently pursuing my Master&apos;s at USC while building things that scale.
+          <div className="font-mono text-sm text-muted-foreground mb-2">
+            <span className="text-primary">$</span> cat about.txt
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <span className="gradient-text font-mono">whoami</span>
+          </h2>
+          <p className="text-muted-foreground max-w-2xl font-mono text-sm leading-relaxed">
+            <span className="text-primary"># </span>
+            Full-stack and ML engineer. Deep interest in distributed systems and applied AI.
+            Currently pursuing MS at USC while building things that scale.
           </p>
         </motion.div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+        {/* Stats — terminal variable style */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-16 font-mono">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
+              transition={{ delay: i * 0.08 }}
+              className="bg-card border border-primary/15 rounded-sm px-4 py-3 flex items-center gap-3 hover:border-primary/40 transition-colors"
             >
-              <Card className="glass-card text-center p-6 hover:border-primary/50 transition-colors">
-                <CardContent className="p-0">
-                  <stat.icon className="h-6 w-6 text-primary mx-auto mb-2" />
-                  <div className="text-3xl font-bold gradient-text mb-1">{stat.value}</div>
-                  <div className="text-xs text-muted-foreground">{stat.label}</div>
-                </CardContent>
-              </Card>
+              <span className="text-primary/60">export</span>
+              <span className="text-pink-300">{stat.label}</span>
+              <span className="text-muted-foreground">=</span>
+              <span className="text-primary font-bold text-lg">{stat.value}</span>
+              <span className="text-muted-foreground/50 text-xs ml-auto">{stat.comment}</span>
             </motion.div>
           ))}
         </div>
@@ -74,41 +75,48 @@ export function About() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
         >
-          <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <GraduationCap className="h-6 w-6 text-primary" />
-            Education
-          </h3>
+          <div className="font-mono text-sm text-muted-foreground mb-4">
+            <span className="text-primary">$</span> cat education.log
+          </div>
           <div className="grid md:grid-cols-2 gap-4">
             {education.map((edu, i) => (
               <motion.div
                 key={edu.school}
-                initial={{ opacity: 0, x: i === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
+                transition={{ delay: i * 0.1 }}
               >
-                <Card className="glass-card h-full hover:border-primary/50 transition-colors">
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
-                      <h4 className="font-semibold text-sm leading-tight max-w-[70%]">{edu.school}</h4>
-                      <Badge variant="secondary" className="text-xs shrink-0">{edu.period}</Badge>
+                <Card className="terminal-card h-full hover:border-primary/40 transition-colors">
+                  <CardContent className="p-5">
+                    {/* Terminal chrome */}
+                    <div className="flex items-center gap-1.5 mb-3 pb-2 border-b border-primary/10">
+                      <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-primary/70" />
+                      <span className="ml-2 text-xs text-muted-foreground">education.log</span>
                     </div>
-                    <p className="text-muted-foreground text-sm mb-3">{edu.degree}</p>
-                    {edu.gpa && (
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-xs text-muted-foreground">GPA:</span>
-                        <span className="text-sm font-bold gradient-text">{edu.gpa}</span>
-                      </div>
-                    )}
-                    {edu.courses.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5">
-                        {edu.courses.map((c) => (
-                          <Badge key={c} variant="outline" className="text-xs">{c}</Badge>
-                        ))}
-                      </div>
-                    )}
+                    <div className="space-y-1 text-sm">
+                      <div className="text-primary/60 text-xs"># {edu.period}</div>
+                      <div className="text-pink-300 font-semibold">{edu.school}</div>
+                      <div className="text-muted-foreground">{edu.degree}</div>
+                      {edu.gpa && (
+                        <div className="text-xs mt-2">
+                          <span className="text-primary/60">GPA </span>
+                          <span className="text-primary font-bold">{edu.gpa}</span>
+                        </div>
+                      )}
+                      {edu.courses.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-3">
+                          {edu.courses.map((c) => (
+                            <span key={c} className="text-xs px-2 py-0.5 bg-primary/10 text-primary border border-primary/20 rounded-sm">
+                              {c}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>

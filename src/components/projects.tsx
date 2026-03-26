@@ -27,7 +27,6 @@ const categoryFilters = [
   { label: "ml/ai", value: "ml" },
   { label: "distributed", value: "distributed" },
   { label: "systems", value: "systems" },
-  { label: "fullstack", value: "fullstack" },
 ];
 
 const categoryColors: Record<string, string> = {

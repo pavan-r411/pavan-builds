@@ -23,10 +23,10 @@ function AsciiBar({ level, color }: { level: number; color: string }) {
   const empty = 20 - filled;
   return (
     <span className="font-mono text-xs">
-      <span className="text-primary/40">[</span>
-      <span className="text-primary">{"█".repeat(filled)}</span>
-      <span className="text-primary/15">{"░".repeat(empty)}</span>
-      <span className="text-primary/40">]</span>
+      <span className="text-zinc-400">[</span>
+      <span className="text-zinc-600">{"█".repeat(filled)}</span>
+      <span className="text-zinc-300">{"░".repeat(empty)}</span>
+      <span className="text-zinc-400">]</span>
     </span>
   );
 }
