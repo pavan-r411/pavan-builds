@@ -12,7 +12,7 @@ const titles = [
   "Software Engineer",
   "ML Researcher",
   "Distributed Systems Builder",
-  "OS Kernel Hacker",
+  "AI System builder",
   "LLM Fine-tuner",
 ];
 
@@ -30,10 +30,10 @@ const neofetchLines = [
   { label: "OS", value: "Unix 6th Edition" },
   { label: "Host", value: "Pavan Kumar Ramesh" },
   { label: "Shell", value: "zsh + python + java" },
-  { label: "Education", value: "MS CS @ USC  GPA 4.0" },
+  { label: "Education", value: "MS CS @ USC  GPA 3.8" },
   { label: "Experience", value: "SAP Labs · Oracle  3+ yrs" },
   { label: "Focus", value: "ML · Distributed Systems" },
-  { label: "Languages", value: "Java · Python · TypeScript" },
+  { label: "Languages", value: "Java · Python · C++" },
   { label: "Status", value: "open_to_work  Dec 2026" },
   { label: "Email", value: "pkumarr@usc.edu" },
 ];
