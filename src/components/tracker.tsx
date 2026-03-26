@@ -9,9 +9,12 @@ export function Tracker() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         path: window.location.pathname,
-        referer: document.referrer || null,
+        referer: document.referrer || "",
       }),
-    }).catch(() => {});
+    })
+      .then((r) => r.json())
+      .then((d) => console.log("[tracker]", d))
+      .catch(() => {});
   }, []);
 
   return null;

@@ -3,24 +3,27 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
+    const forwarded = req.headers.get("x-forwarded-for");
     const ip =
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      req.headers.get("cf-connecting-ip") ||
+      (forwarded ? forwarded.split(",")[0].trim() : null) ||
       req.headers.get("x-real-ip") ||
       "unknown";
 
-    const { path, referer } = await req.json();
+    const body = await req.json();
 
-    await (prisma as any).visit.create({
+    await prisma.visit.create({
       data: {
         ip,
-        userAgent: req.headers.get("user-agent") ?? undefined,
-        path: path ?? "/",
-        referer: referer ?? undefined,
+        userAgent: req.headers.get("user-agent") ?? "",
+        path: body.path ?? "/",
+        referer: body.referer ?? "",
       },
     });
 
     return NextResponse.json({ ok: true });
-  } catch {
-    return NextResponse.json({ ok: false }, { status: 500 });
+  } catch (err) {
+    console.error("[track]", err);
+    return NextResponse.json({ ok: false, error: String(err) }, { status: 500 });
   }
 }
