@@ -27,7 +27,7 @@ const bootLines = [
 ];
 
 const neofetchLines = [
-  { label: "OS", value: "macOS Sequoia 15.3" },
+  { label: "OS", value: "Unix 6th Edition" },
   { label: "Host", value: "Pavan Kumar Ramesh" },
   { label: "Shell", value: "zsh + python + java" },
   { label: "Education", value: "MS CS @ USC  GPA 4.0" },
