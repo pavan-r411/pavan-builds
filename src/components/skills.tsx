@@ -1,10 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 type Skill = {
   id: string;
@@ -13,12 +11,25 @@ type Skill = {
   level: number;
 };
 
-const categoryMeta: Record<string, { label: string; color: string; emoji: string }> = {
-  language: { label: "Languages", color: "bg-blue-500", emoji: "⌨️" },
-  database: { label: "Databases", color: "bg-green-500", emoji: "🗄️" },
-  web: { label: "Web & DevOps", color: "bg-purple-500", emoji: "🌐" },
-  ml: { label: "ML / AI", color: "bg-orange-500", emoji: "🧠" },
+const categoryMeta: Record<string, { label: string; icon: string; color: string }> = {
+  language: { label: "languages", icon: "⌨", color: "bg-zinc-700" },
+  database: { label: "databases", icon: "🗄", color: "bg-zinc-700" },
+  web: { label: "web & devops", icon: "🌐", color: "bg-zinc-700" },
+  ml: { label: "ml / ai", icon: "🧠", color: "bg-zinc-700" },
 };
+
+function AsciiBar({ level, color }: { level: number; color: string }) {
+  const filled = Math.round(level / 5);
+  const empty = 20 - filled;
+  return (
+    <span className="font-mono text-xs">
+      <span className="text-primary/40">[</span>
+      <span className="text-primary">{"█".repeat(filled)}</span>
+      <span className="text-primary/15">{"░".repeat(empty)}</span>
+      <span className="text-primary/40">]</span>
+    </span>
+  );
+}
 
 export function Skills({ skills }: { skills: Skill[] }) {
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
@@ -36,60 +47,58 @@ export function Skills({ skills }: { skills: Skill[] }) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="mb-16"
         >
-          <Badge variant="outline" className="mb-4">Toolkit</Badge>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Technical Skills</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            A broad, deep stack across backend, data engineering, and applied ML.
-          </p>
+          <div className="font-mono text-sm text-muted-foreground mb-2">
+            <span className="text-primary">$</span> dpkg --list | grep skills
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold font-mono gradient-text">skills</h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-5">
           {grouped.map((group, gi) => (
             <motion.div
               key={group.key}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: gi * 0.1 }}
+              transition={{ delay: gi * 0.1 }}
             >
-              <Card className="glass-card h-full hover:border-primary/50 transition-colors">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <span>{group.meta.emoji}</span>
-                    {group.meta.label}
-                  </CardTitle>
+              <Card className="terminal-card h-full hover:border-primary/40 transition-colors">
+                <CardHeader className="pb-0 p-0">
+                  <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-primary/10 bg-muted/20">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-primary/70" />
+                    <span className="ml-2 font-mono text-xs text-muted-foreground">
+                      {group.meta.icon} {group.meta.label}
+                    </span>
+                  </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="p-4 space-y-3">
                   {group.skills.map((skill, si) => (
                     <motion.div
                       key={skill.id}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
                       viewport={{ once: true }}
-                      transition={{ delay: gi * 0.1 + si * 0.05 }}
+                      transition={{ delay: gi * 0.1 + si * 0.04 }}
                       onMouseEnter={() => setHoveredSkill(skill.id)}
                       onMouseLeave={() => setHoveredSkill(null)}
-                      className="cursor-default"
+                      className="font-mono text-sm"
                     >
-                      <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-sm font-medium">{skill.name}</span>
-                        <motion.span
-                          className="text-xs text-muted-foreground tabular-nums"
-                          animate={{ opacity: hoveredSkill === skill.id ? 1 : 0.5 }}
-                        >
-                          {skill.level}%
-                        </motion.span>
-                      </div>
-                      <div className="relative h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div className="flex items-center gap-3">
+                        <span className={`w-28 shrink-0 transition-colors ${hoveredSkill === skill.id ? "text-primary" : "text-muted-foreground"}`}>
+                          {skill.name}
+                        </span>
                         <motion.div
-                          className={`absolute left-0 top-0 h-full rounded-full ${group.meta.color}`}
                           initial={{ width: 0 }}
-                          whileInView={{ width: `${skill.level}%` }}
+                          whileInView={{ width: "auto" }}
                           viewport={{ once: true }}
-                          transition={{ duration: 0.8, delay: gi * 0.1 + si * 0.05, ease: "easeOut" }}
-                        />
+                        >
+                          <AsciiBar level={skill.level} color={group.meta.color} />
+                        </motion.div>
+                        <span className="text-xs text-muted-foreground/40 ml-auto">{skill.level}%</span>
                       </div>
                     </motion.div>
                   ))}
@@ -99,24 +108,25 @@ export function Skills({ skills }: { skills: Skill[] }) {
           ))}
         </div>
 
-        {/* All skills tag cloud */}
+        {/* Also proficient */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-10 text-center"
+          className="mt-8"
         >
-          <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Also proficient in</p>
-          <div className="flex flex-wrap gap-2 justify-center">
+          <div className="font-mono text-xs text-muted-foreground mb-3">
+            <span className="text-primary">#</span> also_installed:
+          </div>
+          <div className="flex flex-wrap gap-2">
             {[
               "Apache Kafka", "GCP", "Oracle Cloud", "Azure Data Factory",
               "Jetpack Compose", "Angular", "Ollama", "Cucumber", "JUnit",
               "Maven", "Gradle", "SLF4J", "Prometheus", "Micrometer",
             ].map((tag) => (
-              <Badge key={tag} variant="outline" className="text-xs hover:bg-accent transition-colors cursor-default">
+              <span key={tag} className="font-mono text-xs px-2 py-1 bg-primary/5 text-primary/60 border border-primary/10 rounded-sm hover:border-primary/30 hover:text-primary/80 transition-colors cursor-default">
                 {tag}
-              </Badge>
+              </span>
             ))}
           </div>
         </motion.div>

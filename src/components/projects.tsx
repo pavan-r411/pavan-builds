@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FaGithub } from "react-icons/fa";
-import { Zap, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
@@ -24,65 +23,59 @@ type Project = {
 };
 
 const categoryFilters = [
-  { label: "All", value: "all" },
-  { label: "ML / AI", value: "ml" },
-  { label: "Distributed", value: "distributed" },
-  { label: "Systems", value: "systems" },
-  { label: "Full Stack", value: "fullstack" },
+  { label: "all", value: "all" },
+  { label: "ml/ai", value: "ml" },
+  { label: "distributed", value: "distributed" },
+  { label: "systems", value: "systems" },
+  { label: "fullstack", value: "fullstack" },
 ];
 
 const categoryColors: Record<string, string> = {
-  ml: "bg-purple-500/10 text-purple-500 border-purple-500/20",
-  distributed: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-  systems: "bg-orange-500/10 text-orange-500 border-orange-500/20",
-  fullstack: "bg-green-500/10 text-green-500 border-green-500/20",
+  ml: "text-zinc-600 border-zinc-400/40 bg-zinc-100",
+  distributed: "text-zinc-600 border-zinc-400/40 bg-zinc-100",
+  systems: "text-zinc-600 border-zinc-400/40 bg-zinc-100",
+  fullstack: "text-zinc-600 border-zinc-400/40 bg-zinc-100",
 };
 
 function ProjectCard({ project }: { project: Project }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <motion.div layout>
-      <Card className="glass-card h-full hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/5 group">
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between gap-2">
-            <div>
-              <div className="flex items-center gap-2 mb-2 flex-wrap">
-                <span
-                  className={`text-xs px-2 py-0.5 rounded-full border font-medium ${
-                    categoryColors[project.category] ?? "bg-muted text-muted-foreground border-border"
-                  }`}
-                >
-                  {categoryFilters.find((c) => c.value === project.category)?.label ?? project.category}
-                </span>
-                {project.featured && (
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium flex items-center gap-1">
-                    <Zap className="h-3 w-3" /> Featured
-                  </span>
-                )}
-              </div>
-              <h3 className="font-bold text-base group-hover:text-primary transition-colors">
-                {project.title}
-              </h3>
-              <p className="text-xs text-muted-foreground mt-1">
-                {project.startDate}{project.endDate ? ` – ${project.endDate}` : " – Present"}
-              </p>
-            </div>
-            {project.githubUrl && (
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(buttonVariants({ size: "icon", variant: "ghost" }), "shrink-0 h-8 w-8")}
-              >
-                <FaGithub className="h-4 w-4" />
-              </a>
-            )}
-          </div>
-        </CardHeader>
+    <Card className="terminal-card h-full hover:border-primary/40 transition-all hover:shadow-lg hover:shadow-primary/5 group">
+      <CardContent className="p-0">
+        {/* Terminal window chrome */}
+        <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-primary/10 bg-muted/20">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+          <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+          <span className="w-2.5 h-2.5 rounded-full bg-primary/70" />
+          <span className="ml-2 font-mono text-xs text-muted-foreground flex-1">
+            ~/{project.category}/{project.title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")}
+          </span>
+          <span className={cn("text-xs px-1.5 py-0.5 rounded-sm border font-mono", categoryColors[project.category] ?? "text-muted-foreground border-border")}>
+            {project.category}
+          </span>
+          {project.githubUrl && (
+            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
+              className={cn(buttonVariants({ size: "icon", variant: "ghost" }), "h-6 w-6 ml-1")}>
+              <FaGithub className="h-3 w-3" />
+            </a>
+          )}
+        </div>
 
-        <CardContent className="pt-0">
-          <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{project.description}</p>
+        <div className="p-4">
+          {/* Title with prompt */}
+          <div className="font-mono mb-3">
+            <div className="text-xs text-muted-foreground/60 mb-1">
+              <span className="text-primary/50">#</span> {project.startDate}{project.endDate ? ` – ${project.endDate}` : " – present"}
+            </div>
+            <h3 className="font-bold text-base text-pink-300 group-hover:text-primary transition-colors">
+              {project.title}
+            </h3>
+          </div>
+
+          <p className="text-sm text-muted-foreground font-mono leading-relaxed mb-4">
+            {project.description}
+          </p>
 
           <AnimatePresence>
             {expanded && (
@@ -92,14 +85,12 @@ function ProjectCard({ project }: { project: Project }) {
                 exit={{ opacity: 0, height: 0 }}
                 className="mb-4"
               >
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
-                  Key Highlights
-                </p>
-                <ul className="space-y-1.5">
+                <div className="font-mono text-xs text-primary/60 mb-2">$ ./highlights.sh</div>
+                <ul className="space-y-1.5 font-mono text-sm">
                   {project.highlights.map((h, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm">
-                      <span className="text-primary mt-1">▸</span>
-                      <span className="text-muted-foreground">{h}</span>
+                    <li key={i} className="flex items-start gap-2 text-muted-foreground">
+                      <span className="text-primary mt-0.5">▸</span>
+                      <span>{h}</span>
                     </li>
                   ))}
                 </ul>
@@ -107,84 +98,81 @@ function ProjectCard({ project }: { project: Project }) {
             )}
           </AnimatePresence>
 
+          {/* Tags */}
           <div className="flex flex-wrap gap-1.5 mb-3">
             {project.tags.slice(0, expanded ? undefined : 4).map((tag) => (
-              <Badge key={tag} variant="outline" className="text-xs">
+              <span key={tag} className="font-mono text-xs px-2 py-0.5 bg-primary/5 text-primary/70 border border-primary/15 rounded-sm">
                 {tag}
-              </Badge>
+              </span>
             ))}
             {!expanded && project.tags.length > 4 && (
-              <Badge variant="outline" className="text-xs text-muted-foreground">
-                +{project.tags.length - 4}
-              </Badge>
+              <span className="font-mono text-xs px-2 py-0.5 text-muted-foreground/50">
+                +{project.tags.length - 4} more
+              </span>
             )}
           </div>
 
           <Button
             variant="ghost"
             size="sm"
-            className="w-full text-xs text-muted-foreground hover:text-foreground gap-1"
+            className="w-full font-mono text-xs text-muted-foreground hover:text-primary gap-1"
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? (
-              <>Less <ChevronUp className="h-3 w-3" /></>
-            ) : (
-              <>Details <ChevronDown className="h-3 w-3" /></>
-            )}
+            {expanded ? <>collapse <ChevronUp className="h-3 w-3" /></> : <>expand <ChevronDown className="h-3 w-3" /></>}
           </Button>
-        </CardContent>
-      </Card>
-    </motion.div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
 export function Projects({ projects }: { projects: Project[] }) {
   const [activeFilter, setActiveFilter] = useState("all");
-
-  const filtered =
-    activeFilter === "all" ? projects : projects.filter((p) => p.category === activeFilter);
+  const filtered = activeFilter === "all" ? projects : projects.filter((p) => p.category === activeFilter);
 
   return (
-    <section id="projects" className="section-padding bg-muted/30">
+    <section id="projects" className="section-padding bg-muted/10">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="mb-12"
         >
-          <Badge variant="outline" className="mb-4">Work</Badge>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Projects</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            From distributed query engines to LLM fine-tuning and OS kernel internals.
-          </p>
+          <div className="font-mono text-sm text-muted-foreground mb-2">
+            <span className="text-primary">$</span> ls -la ~/projects/
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold font-mono gradient-text">projects</h2>
         </motion.div>
 
-        {/* Filters */}
-        <div className="flex flex-wrap gap-2 justify-center mb-10">
+        {/* Filter tabs */}
+        <div className="flex flex-wrap gap-2 mb-10 font-mono text-xs">
           {categoryFilters.map((f) => (
-            <Button
+            <button
               key={f.value}
-              variant={activeFilter === f.value ? "default" : "outline"}
-              size="sm"
               onClick={() => setActiveFilter(f.value)}
-              className="text-xs"
+              className={cn(
+                "px-3 py-1.5 border rounded-sm transition-colors",
+                activeFilter === f.value
+                  ? "bg-primary/10 border-primary text-primary"
+                  : "border-primary/20 text-muted-foreground hover:border-primary/40 hover:text-primary/70"
+              )}
             >
-              {f.label}
-            </Button>
+              {activeFilter === f.value ? `[${f.label}]` : f.label}
+            </button>
           ))}
         </div>
 
-        <motion.div layout className="grid md:grid-cols-2 gap-6">
+        <motion.div layout className="grid md:grid-cols-2 gap-5">
           <AnimatePresence mode="popLayout">
             {filtered.map((project) => (
               <motion.div
                 key={project.id}
                 layout
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.25 }}
               >
                 <ProjectCard project={project} />
               </motion.div>
