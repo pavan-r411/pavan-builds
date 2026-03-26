@@ -10,12 +10,19 @@ const schema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  let data;
   try {
     const body = await req.json();
-    const data = schema.parse(body);
-    await prisma.contactMessage.create({ data });
-    return NextResponse.json({ success: true });
+    data = schema.parse(body);
   } catch {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  }
+
+  try {
+    await prisma.contactMessage.create({ data });
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("[contact]", err);
+    return NextResponse.json({ error: "Failed to save message" }, { status: 500 });
   }
 }
