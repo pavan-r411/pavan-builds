@@ -41,6 +41,15 @@ model Skill {
   level    Int    @default(80)
 }
 
+model Visit {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  ip        String
+  userAgent String?
+  path      String
+  referer   String?
+  timestamp DateTime @default(now())
+}
+
 model ContactMessage {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
