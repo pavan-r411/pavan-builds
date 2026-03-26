@@ -245,7 +245,7 @@ export function Hero() {
                 <a href="/resume.pdf" download className={cn(buttonVariants({ size: "lg", variant: "outline" }), "font-mono")}>
                   ./resume.pdf
                 </a>
-                <a href="https://github.com/pavanramesh" target="_blank" rel="noopener noreferrer"
+                <a href="https://github.com/pavan-r411" target="_blank" rel="noopener noreferrer"
                   className={cn(buttonVariants({ size: "icon", variant: "ghost" }))}>
                   <FaGithub className="h-4 w-4" />
                 </a>
